@@ -12,25 +12,16 @@ public class Main {
 		
 		String exp = "";	//expression
 		int op1, op2;		//operands
-		int opCount;		//num of operands. max 2
-		boolean hasTwoElements = false;
 		int temp1, temp2;
 		
 		while (input.hasNextLine()) {
 			exp = input.nextLine();
 			for (int i = 0; i < exp.length(); i++) {
 				//check to see if there are at least 2 elements in the stack
-				opCount = 0;
-				if (!stack.isEmpty()) {
-					//check if the assignment is success
-					if ((Integer)(temp1 = stack.pop()) != null && (Integer)(temp1 = stack.pop()) != null) {
-						hasTwoElements = true;
-					}
-				}
 				System.out.println(stack);
 				switch (exp.charAt(i)) {
 					case '+': {
-						if (stack.size() > 0 && hasTwoElements) {
+						if (stack.size() > 0 && hasTwoElements(stack)) {
 							op2 = stack.pop();
 							op1 = stack.pop();
 							stack.push(op1 + op2);
@@ -38,7 +29,7 @@ public class Main {
 						}
 					}
 					case '-': {
-						if (stack.size() > 0 && hasTwoElements) {
+						if (stack.size() > 0 && hasTwoElements(stack)) {
 							op2 = stack.pop();
 							op1 = stack.pop();
 							stack.push(op1 - op2);
@@ -46,7 +37,7 @@ public class Main {
 						}
 					}
 					case '*': {
-						if (stack.size() > 0 && hasTwoElements) {
+						if (stack.size() > 0 && hasTwoElements(stack)) {
 							op2 = stack.pop();
 							op1 = stack.pop();
 							stack.push(op1 * op2);
@@ -54,7 +45,7 @@ public class Main {
 						}
 					}
 					case '/': {
-						if (stack.size() > 0 && hasTwoElements) {
+						if (stack.size() > 0 && hasTwoElements(stack)) {
 							op2 = stack.pop();
 							op1 = stack.pop();
 							stack.push(op1 / op2);
@@ -62,7 +53,7 @@ public class Main {
 						}
 					}
 					case '%': {
-						if (stack.size() > 0 && hasTwoElements) {
+						if (stack.size() > 0 && hasTwoElements(stack)) {
 							op2 = stack.pop();
 							op1 = stack.pop();
 							stack.push(op1 % op2);
@@ -70,7 +61,7 @@ public class Main {
 						}
 					}
 					case '^': {
-						if (stack.size() > 0 && hasTwoElements) {
+						if (stack.size() > 0 && hasTwoElements(stack)) {
 							op2 = stack.pop();
 							op1 = stack.pop();
 							stack.push(op1 ^ op2);
@@ -86,5 +77,22 @@ public class Main {
 		}
 		
 	}
-
+	
+	public static <Integer> boolean hasTwoElements(Stack<Integer> stack) {
+		int opCount = 0;
+		Integer temp1 = new Integer(0);
+		Integer temp2 = new Integer(0);
+		boolean happened = false;
+		if (!stack.isEmpty()) {
+			//check if the assignment is success
+			happened = ((temp1 = (java.lang.Integer) stack.pop()) != 0)
+					&& ((temp2 = (java.lang.Integer) stack.pop()) != 0);
+			
+			if (happened) {
+				stack.push(temp1);
+				stack.push(temp2);
+			}
+		}
+		return false;
+	}
 }

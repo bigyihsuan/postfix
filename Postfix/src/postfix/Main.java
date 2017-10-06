@@ -75,9 +75,6 @@ public class Main {
 				}
 			}
 		}
-		
-	}
-	
 	public static <Integer> boolean hasTwoElements(Stack<Integer> stack) {
 		int opCount = 0;
 		Integer temp1 = new Integer(0);

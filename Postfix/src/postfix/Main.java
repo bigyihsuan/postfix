@@ -12,121 +12,135 @@ public class Main {
 
 		String exp = ""; //expression
 		boolean run;
+		int ops;	//number of operators in expression
+		int num;	//number of numbers in expression
 
 		do {
 			System.out.print("Enter a valid postfix expression: ");
 			exp = input.nextLine();
-			pushOnToStack(exp, stack);
+			ops = 0;
+			num = 0;
 			
-			if (stack.size() > 1) {
-				System.out.println("Error: Not enough operators");
+			for (int i = 0; i < exp.length(); i++) {
+				if (Character.isDigit(exp.charAt(i))) {
+					num++;
+				} else {
+					switch (exp.charAt(i)) {
+						case '+':
+							ops++; break;
+						case '-':
+							ops++; break;
+						case '*':
+							ops++; break;
+						case '/':
+							ops++; break;
+						case '%':
+							ops++; break;
+						case '^':
+							ops++; break;
+						default:
+							break;
+					}
+				}
+			}
+			
+			//length of 1, just print
+			//length of 2+, AND not enough/too many ops, give error
+			//length of 2+, AND enough ops, process
+			if (exp.length() == 1 && Character.isDigit(exp.charAt(0))) {
+				System.out.println(exp);
+			} else if (num - 1 != ops){
+				System.out.println("Error: Invalid expression/operator count");
 			} else {
+				proccessString(exp, stack);
 				System.out.println(stack.peek());
 				stack.clear();
 			}
-			
-			System.out.print("Run again? (y/n): ");
+
+			System.out.print("Run again? (y to continue, anything else to exit): ");
 			exp = input.nextLine();
-			run = (exp.charAt(0) == 'y') ? true : false;
+			if (!exp.equals("") && exp.charAt(0) == 'y') {
+				run = true; 
+			} else {
+				run = false;
+			}
 		} while (run);
 
 		System.out.println("done");
 	}
-	
-	public static <E> void pushOnToStack(String exp, Stack<Integer> stack) {
+
+	public static <E> void proccessString(String exp, Stack<Integer> stack) {
 		int op1, op2;		//operands
 		for (int i = 0; i < exp.length(); i++) {
 			//check to see if there are at least 2 elements in the stack
-			boolean thing = stack.size() >= 0;
+			boolean hasTwoElements = stack.size() >= 2;
 			
-			switch (exp.charAt(i)) {
-				case '+': {
-					if (thing && hasTwoElements(stack)) {
-						op2 = stack.pop();
-						op1 = stack.pop();
-						stack.push(op1 + op2);
-						break;
-					}
-				}
-				case '-': {
-					if (thing && hasTwoElements(stack)) {
-						op2 = stack.pop();
-						op1 = stack.pop();
-						stack.push(op1 - op2);
-						break;
-					}
-				}
-				case '*': {
-					if (thing && hasTwoElements(stack)) {
-						op2 = stack.pop();
-						op1 = stack.pop();
-						stack.push(op1 * op2);
-						break;
-					}
-				}
-				case '/': {
-					if (thing && hasTwoElements(stack)) {
-						op2 = stack.pop();
-						op1 = stack.pop();
-						if (op2 == 0) {
-							System.out.println("Error: Divide by 0!");
-						} else {
-							stack.push(op1 / op2);
+				switch (exp.charAt(i)) {
+					case '+': {
+						if (hasTwoElements) {
+							op2 = stack.pop();
+							op1 = stack.pop();
+							stack.push(op1 + op2);
+							break;
 						}
-						break;
 					}
-				}
-				case '%': {
-					if (thing && hasTwoElements(stack)) {
-						op2 = stack.pop();
-						op1 = stack.pop();
-						if (op2 == 0) {
-							System.out.println("Error: Divide by 0!");
-						} else {
-							stack.push(op1 % op2);
+					case '-': {
+						if (hasTwoElements) {
+							op2 = stack.pop();
+							op1 = stack.pop();
+							stack.push(op1 - op2);
+							break;
 						}
+					}
+					case '*': {
+						if (hasTwoElements) {
+							op2 = stack.pop();
+							op1 = stack.pop();
+							stack.push(op1 * op2);
+							break;
+						}
+					}
+					case '/': {
+						if (hasTwoElements) {
+							op2 = stack.pop();
+							op1 = stack.pop();
+							if (op2 == 0) {
+								System.out.println("Error: Divide by 0!");
+								return;
+							} else {
+								stack.push(op1 / op2);
+								break;
+							}
+						}
+					}
+					case '%': {
+						if (hasTwoElements) {
+							op2 = stack.pop();
+							op1 = stack.pop();
+							if (op2 == 0) {
+								System.out.println("Error: Divide by 0!");
+								return;
+							} else {
+								stack.push(op1 % op2);
+								break;
+							}
+						}
+					}
+					case '^': {
+						if (hasTwoElements) {
+							op2 = stack.pop();
+							op1 = stack.pop();
+							stack.push((int)Math.pow(op1, op2));
+							break;
+						}
+					}
+					default: {
+						stack.push(exp.charAt(i) - 48);
 						break;
 					}
-				}
-				case '^': {
-					if (thing && hasTwoElements(stack)) {
-						op2 = stack.pop();
-						op1 = stack.pop();
-						stack.push(op1 ^ op2);
-						break;
-					}
-				}
-				default: {
-					stack.push(exp.charAt(i) - 48);
-					break;
-				}
 			}
+			//debug
 			System.out.println(stack);
 		}
-<<<<<<< HEAD
-	public static <Integer> boolean hasTwoElements(Stack<Integer> stack) {
-		int opCount = 0;
-		Integer temp1 = new Integer(0);
-		Integer temp2 = new Integer(0);
-=======
-	}
-	
-	public static <E> boolean hasTwoElements(Stack<E> stack) {
-		int temp1 = 0;
-		int temp2 = 0;
->>>>>>> origin/master
-		boolean happened = false;
-		if (!stack.isEmpty()) {
-			//check if the assignment is success
-			happened = ((temp1 = (java.lang.Integer) stack.pop()) != 0)
-					&& ((temp2 = (java.lang.Integer) stack.pop()) != 0);
-			
-			if (happened) { //if the 2 assignments happened
-				stack.push((E) new Integer(temp2)); //reverse order b/c popped in order
-				stack.push((E) new Integer(temp1));
-				return true;
-			}
-		}
-		return false;
 	}
 }
